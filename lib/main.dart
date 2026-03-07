@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'core/constants/app_colors.dart';
-import 'features/auth/screens/loginScreen.dart';
+import 'features/services/screens/mainNavigationScreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +12,7 @@ void main() {
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: AppColors.backgroundColor,
+      systemNavigationBarColor: AppColors.white,
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
@@ -29,7 +29,7 @@ class FixioBikeApp extends StatelessWidget {
       title: 'Fixio Bike',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const LoginScreen(),
+      home: const MainNavigationScreen(),
     );
   }
 }
