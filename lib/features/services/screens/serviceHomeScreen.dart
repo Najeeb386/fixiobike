@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 
-/// Service Home Screen for Fixio Bike App
-/// Main screen showing services, cities, bikes selection, and how it works
 class ServiceHomeScreen extends StatefulWidget {
   const ServiceHomeScreen({super.key});
 
@@ -14,148 +12,40 @@ class _ServiceHomeScreenState extends State<ServiceHomeScreen> {
   String? selectedCity;
   String? selectedBike;
 
-  // List of cities with their iconic landmarks
   final List<Map<String, dynamic>> cities = [
-    {
-      'name': 'Karachi',
-      'landmark': 'Mazar-e-Quaid',
-      'icon': Icons.location_city,
-    },
-    {
-      'name': 'Lahore',
-      'landmark': 'Minar-e-Pakistan',
-      'icon': Icons.location_city,
-    },
-    {
-      'name': 'Islamabad',
-      'landmark': 'Faisal Mosque',
-      'icon': Icons.location_city,
-    },
-    {
-      'name': 'Peshawar',
-      'landmark': 'Khyber Pass',
-      'icon': Icons.location_city,
-    },
-    {
-      'name': 'Multan',
-      'landmark': 'Shah Rukh Garden',
-      'icon': Icons.location_city,
-    },
-    {
-      'name': 'Faisalabad',
-      'landmark': 'Lyallpur',
-      'icon': Icons.location_city,
-    },
+    {'name': 'Karachi', 'landmark': 'Mazar-e-Quaid', 'icon': Icons.location_city},
+    {'name': 'Lahore', 'landmark': 'Minar-e-Pakistan', 'icon': Icons.location_city},
+    {'name': 'Islamabad', 'landmark': 'Faisal Mosque', 'icon': Icons.location_city},
+    {'name': 'Peshawar', 'landmark': 'Khyber Pass', 'icon': Icons.location_city},
   ];
 
-  // List of bikes
   final List<Map<String, dynamic>> bikes = [
-    {
-      'name': 'Honda CB 150',
-      'brand': 'Honda',
-      'icon': Icons.pedal_bike,
-    },
-    {
-      'name': 'Yamaha YBR 125',
-      'brand': 'Yamaha',
-      'icon': Icons.pedal_bike,
-    },
-    {
-      'name': 'Suzuki GD 110',
-      'brand': 'Suzuki',
-      'icon': Icons.pedal_bike,
-    },
-    {
-      'name': 'Kawasaki Ninja',
-      'brand': 'Kawasaki',
-      'icon': Icons.pedal_bike,
-    },
-    {
-      'name': 'Harley Davidson',
-      'brand': 'Harley',
-      'icon': Icons.pedal_bike,
-    },
-    {
-      'name': 'TVS Apache',
-      'brand': 'TVS',
-      'icon': Icons.pedal_bike,
-    },
+    {'name': 'Honda CB 150', 'brand': 'Honda', 'icon': Icons.pedal_bike},
+    {'name': 'Yamaha YBR 125', 'brand': 'Yamaha', 'icon': Icons.pedal_bike},
+    {'name': 'Suzuki GD 110', 'brand': 'Suzuki', 'icon': Icons.pedal_bike},
   ];
 
-  // Service categories
   final List<Map<String, dynamic>> serviceCategories = [
-    {
-      'name': 'Oil Change',
-      'icon': Icons.opacity,
-      'color': Colors.blue,
-    },
-    {
-      'name': 'Brake Service',
-      'icon': Icons.handyman,
-      'color': Colors.orange,
-    },
-    {
-      'name': 'Tire Service',
-      'icon': Icons.settings,
-      'color': Colors.purple,
-    },
-    {
-      'name': 'Battery',
-      'icon': Icons.battery_charging_full,
-      'color': Colors.green,
-    },
-    {
-      'name': 'Chain Sprocket',
-      'icon': Icons.link,
-      'color': Colors.red,
-    },
-    {
-      'name': 'Engine Tune',
-      'icon': Icons.tune,
-      'color': Colors.teal,
-    },
+    {'name': 'Oil Change', 'icon': Icons.opacity, 'color': Colors.blue},
+    {'name': 'Brake Service', 'icon': Icons.handyman, 'color': Colors.orange},
+    {'name': 'Tire Service', 'icon': Icons.settings, 'color': Colors.purple},
+    {'name': 'Battery', 'icon': Icons.battery_charging_full, 'color': Colors.green},
+    {'name': 'Chain Sprocket', 'icon': Icons.link, 'color': Colors.red},
+    {'name': 'Engine Tune', 'icon': Icons.tune, 'color': Colors.teal},
   ];
 
-  // Trending services
   final List<Map<String, dynamic>> trendingServices = [
-    {
-      'name': 'Full Service',
-      'price': 'Rs. 2,500',
-      'rating': '4.8',
-      'time': '45 min',
-    },
-    {
-      'name': 'Oil Change',
-      'price': 'Rs. 800',
-      'rating': '4.9',
-      'time': '15 min',
-    },
-    {
-      'name': 'Brake Pads',
-      'price': 'Rs. 1,200',
-      'rating': '4.7',
-      'time': '30 min',
-    },
-    {
-      'name': 'Tire Replacement',
-      'price': 'Rs. 3,500',
-      'rating': '4.6',
-      'time': '60 min',
-    },
+    {'name': 'Full Service', 'image': null},
+    {'name': 'Oil Change', 'image': null},
+    {'name': 'Brake Pads', 'image': null},
+    {'name': 'Tire Replace', 'image': null},
+    {'name': 'Battery Svc', 'image': null},
+    {'name': 'Chain Maint', 'image': null},
   ];
 
-  // Tailored services
   final List<Map<String, dynamic>> tailoredServices = [
-    {
-      'name': 'Monthly Maintenance',
-      'price': 'Rs. 1,500/mo',
-      'description': 'Regular checkups & oil changes',
-    },
-    {
-      'name': 'Annual Package',
-      'price': 'Rs. 15,000/yr',
-      'description': 'Complete yearly service coverage',
-    },
+    {'name': 'Monthly Maint', 'description': 'Regular checkups', 'image': null},
+    {'name': 'Annual Pkg', 'description': 'Yearly coverage', 'image': null},
   ];
 
   void _showCityModal() {
@@ -170,14 +60,7 @@ class _ServiceHomeScreenState extends State<ServiceHomeScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Select Your City',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textDark,
-              ),
-            ),
+            const Text('Select Your City', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textDark)),
             const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
@@ -186,41 +69,15 @@ class _ServiceHomeScreenState extends State<ServiceHomeScreen> {
                   final city = cities[index];
                   return ListTile(
                     leading: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                        city['icon'],
-                        color: AppColors.primaryColor,
-                      ),
+                      width: 50, height: 50,
+                      decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+                      child: Icon(city['icon'], color: AppColors.primaryColor),
                     ),
-                    title: Text(
-                      city['name'],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textDark,
-                      ),
-                    ),
-                    subtitle: Text(
-                      city['landmark'],
-                      style: const TextStyle(
-                        color: AppColors.grey,
-                        fontSize: 12,
-                      ),
-                    ),
-                    trailing: selectedCity == city['name']
-                        ? const Icon(
-                            Icons.check_circle,
-                            color: AppColors.primaryColor,
-                          )
-                        : null,
+                    title: Text(city['name'], style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.textDark)),
+                    subtitle: Text(city['landmark'], style: const TextStyle(color: AppColors.grey, fontSize: 12)),
+                    trailing: selectedCity == city['name'] ? const Icon(Icons.check_circle, color: AppColors.primaryColor) : null,
                     onTap: () {
-                      setState(() {
-                        selectedCity = city['name'];
-                      });
+                      setState(() => selectedCity = city['name']);
                       Navigator.pop(context);
                     },
                   );
@@ -236,23 +93,14 @@ class _ServiceHomeScreenState extends State<ServiceHomeScreen> {
   void _showBikeModal() {
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (context) => Container(
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Select Your Bike',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textDark,
-              ),
-            ),
+            const Text('Select Your Bike', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textDark)),
             const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
@@ -261,41 +109,15 @@ class _ServiceHomeScreenState extends State<ServiceHomeScreen> {
                   final bike = bikes[index];
                   return ListTile(
                     leading: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                        bike['icon'],
-                        color: AppColors.primaryColor,
-                      ),
+                      width: 50, height: 50,
+                      decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+                      child: Icon(bike['icon'], color: AppColors.primaryColor),
                     ),
-                    title: Text(
-                      bike['name'],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textDark,
-                      ),
-                    ),
-                    subtitle: Text(
-                      bike['brand'],
-                      style: const TextStyle(
-                        color: AppColors.grey,
-                        fontSize: 12,
-                      ),
-                    ),
-                    trailing: selectedBike == bike['name']
-                        ? const Icon(
-                            Icons.check_circle,
-                            color: AppColors.primaryColor,
-                          )
-                        : null,
+                    title: Text(bike['name'], style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.textDark)),
+                    subtitle: Text(bike['brand'], style: const TextStyle(color: AppColors.grey, fontSize: 12)),
+                    trailing: selectedBike == bike['name'] ? const Icon(Icons.check_circle, color: AppColors.primaryColor) : null,
                     onTap: () {
-                      setState(() {
-                        selectedBike = bike['name'];
-                      });
+                      setState(() => selectedBike = bike['name']);
                       Navigator.pop(context);
                     },
                   );
@@ -317,34 +139,17 @@ class _ServiceHomeScreenState extends State<ServiceHomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Search Input
               _buildSearchSection(),
-              
               const SizedBox(height: 16),
-              
-              // City and Bike Selection Row
               _buildCityBikeSelection(),
-              
               const SizedBox(height: 24),
-              
-              // Service Categories
               _buildServiceCategories(),
-              
               const SizedBox(height: 24),
-              
-              // Trending Services Carousel
               _buildTrendingServices(),
-              
               const SizedBox(height: 24),
-              
-              // Tailored Services
               _buildTailoredServices(),
-              
               const SizedBox(height: 24),
-              
-              // How Fixio Works
               _buildHowItWorks(),
-              
               const SizedBox(height: 32),
             ],
           ),
@@ -359,23 +164,14 @@ class _ServiceHomeScreenState extends State<ServiceHomeScreen> {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4))],
       ),
       child: TextField(
         decoration: InputDecoration(
           hintText: 'Search services...',
           hintStyle: const TextStyle(color: AppColors.grey),
           prefixIcon: const Icon(Icons.search, color: AppColors.primaryColor),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
           filled: true,
           fillColor: AppColors.white,
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -389,92 +185,42 @@ class _ServiceHomeScreenState extends State<ServiceHomeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          // Choose City
           Expanded(
             child: GestureDetector(
               onTap: _showCityModal,
               child: Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: selectedCity != null 
-                        ? AppColors.primaryColor 
-                        : AppColors.inputBorder,
-                  ),
+                  border: Border.all(color: selectedCity != null ? AppColors.primaryColor : AppColors.inputBorder),
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.location_on,
-                      color: selectedCity != null 
-                          ? AppColors.primaryColor 
-                          : AppColors.grey,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        selectedCity ?? 'Choose City',
-                        style: TextStyle(
-                          color: selectedCity != null 
-                              ? AppColors.textDark 
-                              : AppColors.grey,
-                          fontSize: 14,
-                          fontWeight: selectedCity != null 
-                              ? FontWeight.w600 
-                              : FontWeight.normal,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
+                    Icon(Icons.location_on, color: selectedCity != null ? AppColors.primaryColor : AppColors.grey, size: 18),
+                    const SizedBox(width: 6),
+                    Expanded(child: Text(selectedCity ?? 'City', style: TextStyle(color: selectedCity != null ? AppColors.textDark : AppColors.grey, fontSize: 13, fontWeight: selectedCity != null ? FontWeight.w600 : FontWeight.normal), overflow: TextOverflow.ellipsis)),
                   ],
                 ),
               ),
             ),
           ),
-          const SizedBox(width: 12),
-          // Choose Bike
+          const SizedBox(width: 10),
           Expanded(
             child: GestureDetector(
               onTap: _showBikeModal,
               child: Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: selectedBike != null 
-                        ? AppColors.primaryColor 
-                        : AppColors.inputBorder,
-                  ),
+                  border: Border.all(color: selectedBike != null ? AppColors.primaryColor : AppColors.inputBorder),
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.pedal_bike,
-                      color: selectedBike != null 
-                          ? AppColors.primaryColor 
-                          : AppColors.grey,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        selectedBike ?? 'Choose Bike',
-                        style: TextStyle(
-                          color: selectedBike != null 
-                              ? AppColors.textDark 
-                              : AppColors.grey,
-                          fontSize: 14,
-                          fontWeight: selectedBike != null 
-                              ? FontWeight.w600 
-                              : FontWeight.normal,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
+                    Icon(Icons.pedal_bike, color: selectedBike != null ? AppColors.primaryColor : AppColors.grey, size: 18),
+                    const SizedBox(width: 6),
+                    Expanded(child: Text(selectedBike ?? 'Bike', style: TextStyle(color: selectedBike != null ? AppColors.textDark : AppColors.grey, fontSize: 13, fontWeight: selectedBike != null ? FontWeight.w600 : FontWeight.normal), overflow: TextOverflow.ellipsis)),
                   ],
                 ),
               ),
@@ -489,20 +235,10 @@ class _ServiceHomeScreenState extends State<ServiceHomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'Services for Bikes',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textDark,
-            ),
-          ),
-        ),
+        const Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('Services for Bikes', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textDark))),
         const SizedBox(height: 16),
         SizedBox(
-          height: 120,
+          height: 110,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -510,35 +246,16 @@ class _ServiceHomeScreenState extends State<ServiceHomeScreen> {
             itemBuilder: (context, index) {
               final service = serviceCategories[index];
               return Container(
-                width: 90,
-                margin: const EdgeInsets.symmetric(horizontal: 4),
+                width: 80, margin: const EdgeInsets.symmetric(horizontal: 4),
                 child: Column(
                   children: [
                     Container(
-                      width: 70,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color: (service['color'] as Color).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Icon(
-                        service['icon'],
-                        color: service['color'],
-                        size: 30,
-                      ),
+                      width: 60, height: 60,
+                      decoration: BoxDecoration(color: (service['color'] as Color).withOpacity(0.1), borderRadius: BorderRadius.circular(16)),
+                      child: Icon(service['icon'], color: service['color'], size: 26),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      service['name'],
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textDark,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    const SizedBox(height: 6),
+                    Text(service['name'], style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textDark), textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis),
                   ],
                 ),
               );
@@ -555,121 +272,36 @@ class _ServiceHomeScreenState extends State<ServiceHomeScreen> {
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Trending Services',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textDark,
-                ),
-              ),
-              Text(
-                'See All',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: AppColors.primaryColor,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text('Trending Services', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textDark)),
+            Text('See All', style: TextStyle(fontSize: 14, color: AppColors.primaryColor, fontWeight: FontWeight.w600)),
+          ]),
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height: 160,
+          height: 115,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             itemCount: trendingServices.length,
             itemBuilder: (context, index) {
               final service = trendingServices[index];
-              return Container(
-                width: 160,
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
+              return Column(
+                children: [
+                  Container(
+                    width: 85, height: 85, margin: const EdgeInsets.symmetric(horizontal: 3),
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: const Offset(0, 3))],
                     ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Icon(
-                            Icons.pedal_bike,
-                            color: AppColors.primaryColor,
-                            size: 20,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                              size: 16,
-                            ),
-                            Text(
-                              service['rating'],
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textDark,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      service['name'],
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textDark,
-                      ),
-                    ),
-                    const Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          service['price'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primaryColor,
-                          ),
-                        ),
-                        Text(
-                          service['time'],
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: AppColors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                    child: service['image'] != null
+                        ? ClipRRect(borderRadius: BorderRadius.circular(14), child: Image.network(service['image'], fit: BoxFit.cover, errorBuilder: (_, __, ___) => const Icon(Icons.pedal_bike, color: AppColors.primaryColor, size: 32)))
+                        : const Center(child: Icon(Icons.pedal_bike, color: AppColors.primaryColor, size: 32)),
+                  ),
+                  const SizedBox(height: 6),
+                  SizedBox(width: 85, child: Text(service['name'], style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textDark), textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis)),
+                ],
               );
             },
           ),
@@ -682,86 +314,30 @@ class _ServiceHomeScreenState extends State<ServiceHomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'Tailored Services',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textDark,
-            ),
-          ),
-        ),
+        const Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('Tailored Services', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textDark))),
         const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: tailoredServices.map((service) {
-              return Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(
-                        Icons.card_membership,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            service['name'],
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textDark,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            service['description'],
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: AppColors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Text(
-                      service['price'],
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                  ],
-                ),
+        SizedBox(
+          height: 115,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            itemCount: tailoredServices.length,
+            itemBuilder: (context, index) {
+              final service = tailoredServices[index];
+              return Column(
+                children: [
+                  Container(
+                    width: 85, height: 85, margin: const EdgeInsets.symmetric(horizontal: 3),
+                    decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(14), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: const Offset(0, 3))]),
+                    child: service['image'] != null
+                        ? ClipRRect(borderRadius: BorderRadius.circular(14), child: Image.network(service['image'], fit: BoxFit.cover, errorBuilder: (_, __, ___) => const Icon(Icons.card_membership, color: AppColors.primaryColor, size: 32)))
+                        : const Center(child: Icon(Icons.card_membership, color: AppColors.primaryColor, size: 32)),
+                  ),
+                  const SizedBox(height: 6),
+                  SizedBox(width: 85, child: Text(service['name'], style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textDark), textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis)),
+                ],
               );
-            }).toList(),
+            },
           ),
         ),
       ],
@@ -770,37 +346,15 @@ class _ServiceHomeScreenState extends State<ServiceHomeScreen> {
 
   Widget _buildHowItWorks() {
     final steps = [
-      {
-        'title': 'Select the Perfect Bike Service',
-        'description': 'Choose from our wide range of bike maintenance services',
-        'icon': Icons.pedal_bike,
-      },
-      {
-        'title': 'Track Your Bike Service Real-Time',
-        'description': 'Get live updates on your bike service progress',
-        'icon': Icons.location_searching,
-      },
-      {
-        'title': 'Earn While We Service',
-        'description': 'Get rewards and discounts on every service',
-        'icon': Icons.card_giftcard,
-      },
+      {'title': 'Select Service', 'description': 'Choose from our wide range', 'icon': Icons.pedal_bike},
+      {'title': 'Track Real-Time', 'description': 'Get live updates', 'icon': Icons.location_searching},
+      {'title': 'Earn Rewards', 'description': 'Get discounts', 'icon': Icons.card_giftcard},
     ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'How Fixio Works',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textDark,
-            ),
-          ),
-        ),
+        const Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('How Fixio Works', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textDark))),
         const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -809,61 +363,29 @@ class _ServiceHomeScreenState extends State<ServiceHomeScreen> {
               final index = entry.key;
               final step = entry.value;
               return Container(
-                margin: const EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsets.only(bottom: 14),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryColor,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '${index + 1}',
-                          style: const TextStyle(
-                            color: AppColors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                      width: 44, height: 44,
+                      decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(12)),
+                      child: Center(child: Text('${index + 1}', style: const TextStyle(color: AppColors.white, fontSize: 18, fontWeight: FontWeight.bold))),
                     ),
-                    const SizedBox(width: 16),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              Icon(
-                                step['icon'] as IconData,
-                                color: AppColors.primaryColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  step['title'] as String,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.textDark,
-                                  ),
-                                ),
-                              ),
+                              Icon(step['icon'] as IconData, color: AppColors.primaryColor, size: 16),
+                              const SizedBox(width: 6),
+                              Expanded(child: Text(step['title'] as String, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textDark))),
                             ],
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            step['description'] as String,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: AppColors.grey,
-                            ),
-                          ),
+                          const SizedBox(height: 2),
+                          Text(step['description'] as String, style: const TextStyle(fontSize: 12, color: AppColors.grey)),
                         ],
                       ),
                     ),

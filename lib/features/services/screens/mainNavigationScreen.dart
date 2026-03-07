@@ -5,8 +5,6 @@ import 'myRfqsScreen.dart';
 import 'myOrdersScreen.dart';
 import 'nearbyScreen.dart';
 
-/// Main Navigation Screen with Bottom Navigation Bar
-/// Contains Home, My RFQs, My Orders, and Nearby tabs
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
 
@@ -32,92 +30,39 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         children: _screens,
       ),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: AppColors.primaryColor,
-        ),
+        height: 65,
+        decoration: const BoxDecoration(color: AppColors.primaryColor),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(
-                  index: 0,
-                  icon: Icons.home_outlined,
-                  activeIcon: Icons.home,
-                  label: 'Home',
-                ),
-                _buildNavItem(
-                  index: 1,
-                  icon: Icons.request_quote_outlined,
-                  activeIcon: Icons.request_quote,
-                  label: 'My RFQs',
-                ),
-                _buildNavItem(
-                  index: 2,
-                  icon: Icons.shopping_bag_outlined,
-                  activeIcon: Icons.shopping_bag,
-                  label: 'My Orders',
-                ),
-                _buildNavItem(
-                  index: 3,
-                  icon: Icons.location_on_outlined,
-                  activeIcon: Icons.location_on,
-                  label: 'Nearby',
-                ),
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(index: 0, icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home'),
+              _buildNavItem(index: 1, icon: Icons.request_quote_outlined, activeIcon: Icons.request_quote, label: 'My RFQs'),
+              _buildNavItem(index: 2, icon: Icons.shopping_bag_outlined, activeIcon: Icons.shopping_bag, label: 'Orders'),
+              _buildNavItem(index: 3, icon: Icons.location_on_outlined, activeIcon: Icons.location_on, label: 'Nearby'),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildNavItem({
-    required int index,
-    required IconData icon,
-    required IconData activeIcon,
-    required String label,
-  }) {
+  Widget _buildNavItem({required int index, required IconData icon, required IconData activeIcon, required String label}) {
     final isSelected = _currentIndex == index;
-    
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _currentIndex = index;
-        });
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 8,
-        ),
+      onTap: () => setState(() => _currentIndex = index),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected 
-              ? Colors.white.withOpacity(0.2) 
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
+          color: isSelected ? Colors.white.withOpacity(0.2) : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
         ),
-        child: Row(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              isSelected ? activeIcon : icon,
-              color: Colors.white,
-              size: 24,
-            ),
-            if (isSelected) ...[
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-            ],
+            Icon(isSelected ? activeIcon : icon, color: Colors.white, size: 22),
+            const SizedBox(height: 2),
+            Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 10)),
           ],
         ),
       ),
