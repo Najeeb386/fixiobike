@@ -1,3 +1,6 @@
+import 'package:fixiobike/features/auth/screens/loginScreen.dart';
+import 'package:fixiobike/features/dashboard/screens/homepage.dart';
+import 'package:fixiobike/features/services/screens/serviceHomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -29,7 +32,7 @@ class FixioBikeApp extends StatelessWidget {
       title: 'Fixio Bike',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const MainNavigationScreen(),
+      home: const ServiceHomeScreen(),
     );
   }
 }
