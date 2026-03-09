@@ -1,0 +1,653 @@
+import 'package:flutter/material.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../bikes/models/bike_model.dart';
+import '../model/fuel_expense_model.dart';
+import '../widgets/vehicle_bottom_sheet.dart';
+import '../widgets/vehicle_bottom_sheet.dart';
+
+/// Add Fuel Expense Screen for Fixio Bike App
+/// Form to add a new fuel expense record
+class AddFuelExpense extends StatefulWidget {
+  const AddFuelExpense({super.key});
+
+  @override
+  State<AddFuelExpense> createState() => _AddFuelExpenseState();
+}
+
+class _AddFuelExpenseState extends State<AddFuelExpense> {
+  final _formKey = GlobalKey<FormState>();
+
+  // Form controllers
+  final _odometerController = TextEditingController();
+  final _fuelQuantityController = TextEditingController();
+  final _costPerUnitController = TextEditingController();
+  final _vendorController = TextEditingController();
+  final _noteController = TextEditingController();
+
+  // Selected values
+  Bike? _selectedBike;
+  DateTime _selectedDateTime = DateTime.now();
+
+  // Sample bikes - in production, this would come from the bikes_view
+  List<Bike> _availableBikes = [
+    Bike(
+      id: '1',
+      brand: 'Honda',
+      model: 'CB 150',
+      year: 2023,
+      bodyType: 'Sports',
+      plateNumber: 'ABC-1234',
+    ),
+    Bike(
+      id: '2',
+      brand: 'Yamaha',
+      model: 'YBR 125',
+      year: 2022,
+      bodyType: 'Commuter',
+      plateNumber: 'XYZ-5678',
+    ),
+    Bike(
+      id: '3',
+      brand: 'Suzuki',
+      model: 'GD 110',
+      year: 2021,
+      bodyType: 'Standard',
+      plateNumber: 'LMN-9012',
+    ),
+  ];
+
+  @override
+  void dispose() {
+    _odometerController.dispose();
+    _fuelQuantityController.dispose();
+    _costPerUnitController.dispose();
+    _vendorController.dispose();
+    _noteController.dispose();
+    super.dispose();
+  }
+
+  double get _totalPrice {
+    final quantity = double.tryParse(_fuelQuantityController.text) ?? 0;
+    final cost = double.tryParse(_costPerUnitController.text) ?? 0;
+    return quantity * cost;
+  }
+
+  void _showVehicleSelector() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => VehicleBottomSheet(
+        bikes: _availableBikes,
+        selectedBike: _selectedBike,
+        onBikeSelected: (bike) {
+          setState(() {
+            _selectedBike = bike;
+          });
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+
+  void _showDateTimePicker() async {
+    // First show date picker
+    final date = await showDatePicker(
+      context: context,
+      initialDate: _selectedDateTime,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+
+    if (date != null && mounted) {
+      // Then show time picker
+      final time = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(_selectedDateTime),
+      );
+
+      if (time != null && mounted) {
+        setState(() {
+          _selectedDateTime = DateTime(
+            date.year,
+            date.month,
+            date.day,
+            time.hour,
+            time.minute,
+          );
+        });
+      }
+    }
+  }
+
+  void _saveFuelExpense() {
+    if (_formKey.currentState!.validate()) {
+      if (_selectedBike == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please select a vehicle'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        return;
+      }
+
+      final newExpense = FuelExpense(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        bikeId: _selectedBike!.id,
+        bikeBrand: _selectedBike!.brand,
+        bikeModel: _selectedBike!.model,
+        bikeBodyType: _selectedBike!.bodyType,
+        plateNumber: _selectedBike!.plateNumber,
+        dateTime: _selectedDateTime,
+        odometerReading: int.parse(_odometerController.text.trim()),
+        fuelQuantity: double.parse(_fuelQuantityController.text.trim()),
+        costPerUnit: double.parse(_costPerUnitController.text.trim()),
+        vendor: _vendorController.text.trim(),
+        note: _noteController.text.trim().isEmpty ? null : _noteController.text.trim(),
+        imageUrl: null,
+      );
+
+      Navigator.pop(context, newExpense);
+    }
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    final hour = dateTime.hour.toString().padLeft(2, '0');
+    final minute = dateTime.minute.toString().padLeft(2, '0');
+    return '${months[dateTime.month - 1]} ${dateTime.day}, ${dateTime.year} - $hour:$minute';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.backgroundColor,
+      appBar: AppBar(
+        title: const Text('Add Fuel Expense'),
+        backgroundColor: AppColors.backgroundColor,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header
+                const Text(
+                  'Enter fuel expense details',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: AppColors.grey,
+                  ),
+                ),
+                
+                const SizedBox(height: 24),
+                
+                // Vehicle Selector
+                _buildSelectorField(
+                  label: 'Select Vehicle',
+                  value: _selectedBike != null
+                      ? '${_selectedBike!.brand} ${_selectedBike!.model} - ${_selectedBike!.plateNumber}'
+                      : null,
+                  hint: 'Select your bike',
+                  onTap: _showVehicleSelector,
+                ),
+                
+                const SizedBox(height: 16),
+                
+                // Date and Time Selector
+                _buildSelectorField(
+                  label: 'Date & Time',
+                  value: _formatDateTime(_selectedDateTime),
+                  hint: 'Select date and time',
+                  onTap: _showDateTimePicker,
+                ),
+                
+                const SizedBox(height: 16),
+                
+                // Odometer Reading
+                _buildTextField(
+                  controller: _odometerController,
+                  label: 'Odometer Reading (km)',
+                  hint: 'Enter current odometer reading',
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter odometer reading';
+                    }
+                    if (int.tryParse(value.trim()) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
+                ),
+                
+                const SizedBox(height: 16),
+                
+                // Fuel Quantity
+                _buildTextField(
+                  controller: _fuelQuantityController,
+                  label: 'Fuel Quantity (Liters)',
+                  hint: 'Enter fuel quantity',
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter fuel quantity';
+                    }
+                    if (double.tryParse(value.trim()) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
+                  onChanged: (_) => setState(() {}),
+                ),
+                
+                const SizedBox(height: 16),
+                
+                // Cost Per Unit
+                _buildTextField(
+                  controller: _costPerUnitController,
+                  label: 'Cost Per Unit (Rs.)',
+                  hint: 'Enter cost per liter',
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter cost per unit';
+                    }
+                    if (double.tryParse(value.trim()) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
+                  onChanged: (_) => setState(() {}),
+                ),
+                
+                const SizedBox(height: 16),
+                
+                // Total Price (calculated)
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Total Price',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textDark,
+                        ),
+                      ),
+                      Text(
+                        'Rs. ${_totalPrice.toStringAsFixed(0)}',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                
+                const SizedBox(height: 16),
+                
+                // Vendor
+                _buildTextField(
+                  controller: _vendorController,
+                  label: 'Fuel Vendor',
+                  hint: 'Enter vendor name',
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter vendor name';
+                    }
+                    return null;
+                  },
+                ),
+                
+                const SizedBox(height: 16),
+                
+                // Note
+                _buildTextField(
+                  controller: _noteController,
+                  label: 'Note (Optional)',
+                  hint: 'Enter any additional note',
+                  keyboardType: TextInputType.text,
+                  maxLines: 3,
+                ),
+                
+                const SizedBox(height: 16),
+                
+                // Picture Upload
+                _buildPictureUpload(),
+                
+                const SizedBox(height: 32),
+                
+                // Save Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _saveFuelExpense,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryColor,
+                      foregroundColor: AppColors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Save Fuel Expense',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSelectorField({
+    required String label,
+    required String? value,
+    required String hint,
+    required VoidCallback onTap,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textDark,
+          ),
+        ),
+        const SizedBox(height: 8),
+        InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.inputBorder),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    value ?? hint,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: value != null ? AppColors.textDark : AppColors.grey,
+                    ),
+                  ),
+                ),
+                const Icon(
+                  Icons.keyboard_arrow_down,
+                  color: AppColors.grey,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+    required TextInputType keyboardType,
+    String? Function(String?)? validator,
+    void Function(String)? onChanged,
+    int maxLines = 1,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textDark,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: controller,
+          keyboardType: keyboardType,
+          maxLines: maxLines,
+          validator: validator,
+          onChanged: onChanged,
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: const TextStyle(
+              color: AppColors.grey,
+              fontSize: 14,
+            ),
+            filled: true,
+            fillColor: AppColors.white,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.inputBorder),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.inputBorder),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: AppColors.primaryColor,
+                width: 2,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.error),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPictureUpload() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Upload Picture (Optional)',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textDark,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: AppColors.inputBorder,
+              style: BorderStyle.solid,
+            ),
+          ),
+          child: Column(
+            children: [
+              Icon(
+                Icons.cloud_upload_outlined,
+                size: 48,
+                color: AppColors.grey.withOpacity(0.5),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Tap to upload image',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: AppColors.grey,
+                ),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Supports: JPG, PNG',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.grey,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Vehicle Bottom Sheet Selector
+class _VehicleBottomSheet extends StatelessWidget {
+  final List<Bike> bikes;
+  final Bike? selectedBike;
+  final Function(Bike) onBikeSelected;
+
+  const _VehicleBottomSheet({
+    required this.bikes,
+    required this.selectedBike,
+    required this.onBikeSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.85,
+      decoration: const BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        children: [
+          // Handle bar
+          Container(
+            margin: const EdgeInsets.only(top: 12),
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: AppColors.grey.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          
+          // Title
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Select Vehicle',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textDark,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+          ),
+          
+          const Divider(height: 1),
+          
+          // Bikes list
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              itemCount: bikes.length,
+              itemBuilder: (context, index) {
+                final bike = bikes[index];
+                final isSelected = bike.id == selectedBike?.id;
+                
+                return ListTile(
+                  onTap: () => onBikeSelected(bike),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 8,
+                  ),
+                  leading: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.pedal_bike,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                  title: Text(
+                    '${bike.brand} ${bike.model}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                      color: isSelected ? AppColors.primaryColor : AppColors.textDark,
+                    ),
+                  ),
+                  subtitle: Text(
+                    '${bike.bodyType} - ${bike.plateNumber}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.grey,
+                    ),
+                  ),
+                  trailing: isSelected
+                      ? const Icon(
+                          Icons.check_circle,
+                          color: AppColors.primaryColor,
+                        )
+                      : null,
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

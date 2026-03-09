@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../bikes/screens/bikes_view.dart';
+import '../../fuel/screens/fuel_log.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -123,7 +124,13 @@ class _HomepageState extends State<Homepage> {
                     MaterialPageRoute(builder: (context) => const BikesView()),
                   );
                 }),
-                _buildDrawerItem(Icons.local_gas_station, 'My Fuel Log'),
+                _buildDrawerItem(Icons.local_gas_station, 'My Fuel Log', onTap: () {
+                  Navigator.pop(context); // Close drawer
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const FuelLog()),
+                  );
+                }),
                 _buildDrawerItem(Icons.description, 'My Documents'),
                 _buildDrawerItem(Icons.receipt_long, 'My Expenses'),
                 _buildDrawerItem(Icons.map, 'My Trips'),
