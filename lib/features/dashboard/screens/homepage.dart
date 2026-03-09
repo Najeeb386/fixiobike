@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../bikes/screens/bikes_view.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -115,7 +116,13 @@ class _HomepageState extends State<Homepage> {
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
-                _buildDrawerItem(Icons.directions_car, 'My Vehicles'),
+                _buildDrawerItem(Icons.directions_car, 'My Vehicles', onTap: () {
+                  Navigator.pop(context); // Close drawer
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const BikesView()),
+                  );
+                }),
                 _buildDrawerItem(Icons.local_gas_station, 'My Fuel Log'),
                 _buildDrawerItem(Icons.description, 'My Documents'),
                 _buildDrawerItem(Icons.receipt_long, 'My Expenses'),
@@ -133,11 +140,11 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  Widget _buildDrawerItem(IconData icon, String title) {
+  Widget _buildDrawerItem(IconData icon, String title, {VoidCallback? onTap}) {
     return ListTile(
       leading: Icon(icon, color: AppColors.primaryColor),
       title: Text(title, style: const TextStyle(fontSize: 14)),
-      onTap: () {},
+      onTap: onTap ?? () {},
     );
   }
 

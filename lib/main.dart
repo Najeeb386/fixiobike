@@ -32,7 +32,7 @@ class FixioBikeApp extends StatelessWidget {
       title: 'Fixio Bike',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const ServiceHomeScreen(),
+      home: const Homepage(),
     );
   }
 }
