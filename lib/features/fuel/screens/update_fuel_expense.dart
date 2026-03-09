@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../core/constants/app_colors.dart';
+import 'package:get/get.dart';
+import 'package:fixiobike/core/constants/app_colors.dart';
 import '../../bikes/models/bike_model.dart';
 import '../model/fuel_expense_model.dart';
 import 'add_fuel_expense.dart';
@@ -176,7 +177,7 @@ class _UpdateFuelExpenseState extends State<UpdateFuelExpense> {
         imageUrl: widget.expense.imageUrl,
       );
 
-      Navigator.pop(context, updatedExpense);
+      Get.back(result: updatedExpense);
     }
   }
 
@@ -429,13 +430,13 @@ class _UpdateFuelExpenseState extends State<UpdateFuelExpense> {
         content: const Text('Are you sure you want to delete this fuel expense?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Get.back(),
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context); // Close dialog
-              Navigator.pop(context, null); // Return null to indicate deletion
+              Get.back(); // Close dialog
+              Get.back(result: null); // Return null to indicate deletion
             },
             style: TextButton.styleFrom(foregroundColor: AppColors.error),
             child: const Text('Delete'),

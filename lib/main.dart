@@ -1,11 +1,10 @@
-import 'package:fixiobike/features/auth/screens/loginScreen.dart';
+import 'package:fixiobike/core/bindings/app_bindings.dart';
 import 'package:fixiobike/features/dashboard/screens/homepage.dart';
-import 'package:fixiobike/features/services/screens/serviceHomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import 'core/constants/app_colors.dart';
-import 'features/services/screens/mainNavigationScreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,10 +27,11 @@ class FixioBikeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Fixio Bike',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
+      initialBinding: AppBindings(),
       home: const Homepage(),
     );
   }

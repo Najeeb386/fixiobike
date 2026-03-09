@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../core/constants/app_colors.dart';
+import 'package:get/get.dart';
+import 'package:fixiobike/core/constants/app_colors.dart';
 import '../../bikes/models/bike_model.dart';
 import '../model/fuel_expense_model.dart';
 import '../widgets/vehicle_bottom_sheet.dart';
@@ -84,7 +85,7 @@ class _AddFuelExpenseState extends State<AddFuelExpense> {
           setState(() {
             _selectedBike = bike;
           });
-          Navigator.pop(context);
+          Get.back();
         },
       ),
     );
@@ -148,7 +149,7 @@ class _AddFuelExpenseState extends State<AddFuelExpense> {
         imageUrl: null,
       );
 
-      Navigator.pop(context, newExpense);
+      Get.back(result: newExpense);
     }
   }
 

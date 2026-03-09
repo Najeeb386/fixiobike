@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../core/constants/app_colors.dart';
 import '../models/bike_model.dart';
 import '../widgets/bottom_sheet_selector.dart';
@@ -70,7 +71,7 @@ class _AddNewBikeState extends State<AddNewBike> {
         selectedItem: _selectedBrand,
         onItemSelected: (brand) {
           _onBrandSelected(brand);
-          Navigator.pop(context);
+          Get.back();
         },
       ),
     );
@@ -97,7 +98,7 @@ class _AddNewBikeState extends State<AddNewBike> {
         selectedItem: _selectedModel,
         onItemSelected: (model) {
           _onModelSelected(model);
-          Navigator.pop(context);
+          Get.back();
         },
       ),
     );
@@ -114,7 +115,7 @@ class _AddNewBikeState extends State<AddNewBike> {
         selectedItem: _selectedYear?.toString(),
         onItemSelected: (year) {
           _onYearSelected(int.parse(year));
-          Navigator.pop(context);
+          Get.back();
         },
       ),
     );
@@ -131,7 +132,7 @@ class _AddNewBikeState extends State<AddNewBike> {
         selectedItem: _selectedBodyType,
         onItemSelected: (bodyType) {
           _onBodyTypeSelected(bodyType);
-          Navigator.pop(context);
+          Get.back();
         },
       ),
     );
@@ -162,7 +163,7 @@ class _AddNewBikeState extends State<AddNewBike> {
         isSelected: false,
       );
 
-      Navigator.pop(context, newBike);
+      Get.back(result: newBike);
     }
   }
 
@@ -176,7 +177,7 @@ class _AddNewBikeState extends State<AddNewBike> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Get.back(),
         ),
       ),
       body: SafeArea(
@@ -450,7 +451,7 @@ class _BottomSheetSelector extends StatelessWidget {
                 ),
                 IconButton(
                   icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Get.back(),
                 ),
               ],
             ),

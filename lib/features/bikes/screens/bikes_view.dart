@@ -1,100 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../core/constants/app_colors.dart';
+import '../controllers/bikes_controller.dart';
 import '../models/bike_model.dart';
 import 'add_new_bike.dart';
 import 'update_bike.dart';
 
 /// Bikes View Screen for Fixio Bike App
 /// Displays list of user's vehicles with selection option
-class BikesView extends StatefulWidget {
+class BikesView extends StatelessWidget {
   const BikesView({super.key});
 
   @override
-  State<BikesView> createState() => _BikesViewState();
-}
-
-class _BikesViewState extends State<BikesView> {
-  // Sample list of bikes - in production, this would come from API/DB
-  List<Bike> _bikes = [
-    Bike(
-      id: '1',
-      brand: 'Honda',
-      model: 'CB 150',
-      year: 2023,
-      bodyType: 'Sports',
-      plateNumber: 'ABC-1234',
-      isSelected: true,
-    ),
-    Bike(
-      id: '2',
-      brand: 'Yamaha',
-      model: 'YBR 125',
-      year: 2022,
-      bodyType: 'Commuter',
-      plateNumber: 'XYZ-5678',
-      isSelected: false,
-    ),
-    Bike(
-      id: '3',
-      brand: 'Suzuki',
-      model: 'GD 110',
-      year: 2021,
-      bodyType: 'Standard',
-      plateNumber: 'LMN-9012',
-      isSelected: false,
-    ),
-  ];
-
-  String? _selectedBikeId;
-
-  @override
-  void initState() {
-    super.initState();
-    // Set initial selected bike
-    final selectedBike = _bikes.where((bike) => bike.isSelected).firstOrNull;
-    _selectedBikeId = selectedBike?.id;
-  }
-
-  void _onBikeSelected(String bikeId) {
-    setState(() {
-      _selectedBikeId = bikeId;
-      _bikes = _bikes.map((bike) {
-        return bike.copyWith(isSelected: bike.id == bikeId);
-      }).toList();
-    });
-  }
-
-  void _navigateToAddNewBike() async {
-    final result = await Navigator.push<Bike>(
-      context,
-      MaterialPageRoute(builder: (context) => const AddNewBike()),
-    );
-
-    if (result != null) {
-      setState(() {
-        _bikes.add(result);
-      });
-    }
-  }
-
-  void _navigateToUpdateBike(Bike bike) async {
-    final result = await Navigator.push<Bike>(
-      context,
-      MaterialPageRoute(builder: (context) => UpdateBike(bike: bike)),
-    );
-
-    if (result != null) {
-      setState(() {
-        final index = _bikes.indexWhere((b) => b.id == result.id);
-        if (index != -1) {
-          _bikes[index] = result;
-        }
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Get the controller
+    final bikesController = Get.find<BikesController>();
+
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
@@ -102,9 +23,15 @@ class _BikesViewState extends State<BikesView> {
         backgroundColor: AppColors.backgroundColor,
         elevation: 0,
       ),
-      body: _bikes.isEmpty
-          ? _buildEmptyState()
-          : _buildVehicleList(),
+      body: Obx(() {
+        final bikes = bikesController.bikes;
+        
+        if (bikes.isEmpty) {
+          return _buildEmptyState();
+        }
+        
+        return _buildVehicleList(bikesController);
+      }),
       bottomNavigationBar: _buildBottomAppBar(),
     );
   }
@@ -141,20 +68,23 @@ class _BikesViewState extends State<BikesView> {
     );
   }
 
-  Widget _buildVehicleList() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: _bikes.length,
-      itemBuilder: (context, index) {
-        final bike = _bikes[index];
-        return _buildVehicleCard(bike);
-      },
-    );
+  Widget _buildVehicleList(BikesController controller) {
+    return Obx(() {
+      final bikes = controller.bikes;
+      final selectedBikeId = controller.selectedBikeId.value;
+      
+      return ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: bikes.length,
+        itemBuilder: (context, index) {
+          final bike = bikes[index];
+          return _buildVehicleCard(bike, bike.id == selectedBikeId, controller);
+        },
+      );
+    });
   }
 
-  Widget _buildVehicleCard(Bike bike) {
-    final isSelected = _selectedBikeId == bike.id;
-
+  Widget _buildVehicleCard(Bike bike, bool isSelected, BikesController controller) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
@@ -176,7 +106,7 @@ class _BikesViewState extends State<BikesView> {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: () => _onBikeSelected(bike.id),
+          onTap: () => controller.selectBike(bike.id),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
@@ -184,10 +114,10 @@ class _BikesViewState extends State<BikesView> {
                 // Radio button
                 Radio<String>(
                   value: bike.id,
-                  groupValue: _selectedBikeId,
+                  groupValue: controller.selectedBikeId.value,
                   onChanged: (value) {
                     if (value != null) {
-                      _onBikeSelected(value);
+                      controller.selectBike(value);
                     }
                   },
                   activeColor: AppColors.primaryColor,
@@ -321,6 +251,17 @@ class _BikesViewState extends State<BikesView> {
     );
   }
 
+  void _navigateToUpdateBike(Bike bike) async {
+    final bikesController = Get.find<BikesController>();
+    final result = await Get.to<Bike>(
+      () => UpdateBike(bike: bike),
+    );
+
+    if (result != null) {
+      bikesController.updateBike(result);
+    }
+  }
+
   Widget _buildBottomAppBar() {
     return Container(
       decoration: BoxDecoration(
@@ -364,5 +305,16 @@ class _BikesViewState extends State<BikesView> {
         ),
       ),
     );
+  }
+
+  void _navigateToAddNewBike() async {
+    final bikesController = Get.find<BikesController>();
+    final result = await Get.to<Bike>(
+      () => const AddNewBike(),
+    );
+
+    if (result != null) {
+      bikesController.addBike(result);
+    }
   }
 }

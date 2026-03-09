@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../core/constants/app_colors.dart';
 import '../models/bike_model.dart';
 import '../widgets/bottom_sheet_selector.dart';
@@ -85,7 +86,7 @@ class _UpdateBikeState extends State<UpdateBike> {
         selectedItem: _selectedBrand,
         onItemSelected: (brand) {
           _onBrandSelected(brand);
-          Navigator.pop(context);
+          Get.back();
         },
       ),
     );
@@ -112,7 +113,7 @@ class _UpdateBikeState extends State<UpdateBike> {
         selectedItem: _selectedModel,
         onItemSelected: (model) {
           _onModelSelected(model);
-          Navigator.pop(context);
+          Get.back();
         },
       ),
     );
@@ -129,7 +130,7 @@ class _UpdateBikeState extends State<UpdateBike> {
         selectedItem: _selectedYear?.toString(),
         onItemSelected: (year) {
           _onYearSelected(int.parse(year));
-          Navigator.pop(context);
+          Get.back();
         },
       ),
     );
@@ -146,7 +147,7 @@ class _UpdateBikeState extends State<UpdateBike> {
         selectedItem: _selectedBodyType,
         onItemSelected: (bodyType) {
           _onBodyTypeSelected(bodyType);
-          Navigator.pop(context);
+          Get.back();
         },
       ),
     );
@@ -177,7 +178,7 @@ class _UpdateBikeState extends State<UpdateBike> {
         isSelected: widget.bike.isSelected,
       );
 
-      Navigator.pop(context, updatedBike);
+      Get.back(result: updatedBike);
     }
   }
 
@@ -191,7 +192,7 @@ class _UpdateBikeState extends State<UpdateBike> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Get.back(),
         ),
       ),
       body: SafeArea(
@@ -334,13 +335,13 @@ class _UpdateBikeState extends State<UpdateBike> {
         content: const Text('Are you sure you want to delete this bike?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Get.back(),
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context); // Close dialog
-              Navigator.pop(context, null); // Return null to indicate deletion
+              Get.back(); // Close dialog
+              Get.back(result: null); // Return null to indicate deletion
             },
             style: TextButton.styleFrom(foregroundColor: AppColors.error),
             child: const Text('Delete'),
