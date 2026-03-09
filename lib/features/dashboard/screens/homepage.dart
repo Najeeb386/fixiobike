@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../bikes/screens/bikes_view.dart';
 import '../../fuel/screens/fuel_log.dart' hide AppColors;
+import '../../expense/screens/expense_screen.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -127,7 +128,10 @@ class _HomepageState extends State<Homepage> {
                   Get.to(() => const FuelLog());
                 }),
                 _buildDrawerItem(Icons.description, 'My Documents'),
-                _buildDrawerItem(Icons.receipt_long, 'My Expenses'),
+                _buildDrawerItem(Icons.receipt_long, 'My Expenses', onTap: () {
+                  Get.back(); // Close drawer
+                  Get.to(() => const ExpenseScreen());
+                }),
                 _buildDrawerItem(Icons.map, 'My Trips'),
                 _buildDrawerItem(Icons.settings, 'My Parts'),
                 _buildDrawerItem(Icons.store, 'Parts Marketplace'),
