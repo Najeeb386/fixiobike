@@ -5,6 +5,8 @@ import '../../bikes/screens/bikes_view.dart';
 import '../../fuel/screens/fuel_log.dart' hide AppColors;
 import '../../expense/screens/expense_screen.dart';
 import '../../inspection/inspection.dart';
+import '../../accident/accident_reports.dart';
+import '../../accident/new_accident.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -31,6 +33,7 @@ class _HomepageState extends State<Homepage> {
     {'name': 'Log Fuel', 'icon': Icons.local_gas_station, 'color': Colors.orange},
     {'name': 'Orders', 'icon': Icons.shopping_bag, 'color': Colors.purple},
     {'name': 'Documents', 'icon': Icons.folder, 'color': Colors.teal},
+    {'name': 'Report Accident', 'icon': Icons.report_problem, 'color': Colors.red},
   ];
 
   // Vehicle metrics
@@ -141,7 +144,10 @@ class _HomepageState extends State<Homepage> {
                   Get.to(() => const InspectionScreen());
                 }),
                 _buildDrawerItem(Icons.notifications_active, 'Service Reminders'),
-                _buildDrawerItem(Icons.report, 'Accident Reports'),
+                _buildDrawerItem(Icons.report, 'Accident Reports', onTap: () {
+                  Get.back(); // Close drawer
+                  Get.to(() => const AccidentReportsScreen());
+                }),
               ],
             ),
           ),
@@ -296,20 +302,27 @@ class _HomepageState extends State<Homepage> {
           Row(
             children: quickActions.map((action) {
               return Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(12), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 44, height: 44,
-                        decoration: BoxDecoration(color: (action['color'] as Color).withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
-                        child: Icon(action['icon'], color: action['color'], size: 22),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(action['name'], style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textDark), textAlign: TextAlign.center, maxLines: 2),
-                    ],
+                child: GestureDetector(
+                  onTap: () {
+                    if (action['name'] == 'Report Accident') {
+                      Get.to(() => const NewAccidentScreen());
+                    }
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(12), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 44, height: 44,
+                          decoration: BoxDecoration(color: (action['color'] as Color).withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+                          child: Icon(action['icon'], color: action['color'], size: 22),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(action['name'], style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textDark), textAlign: TextAlign.center, maxLines: 2),
+                      ],
+                    ),
                   ),
                 ),
               );
