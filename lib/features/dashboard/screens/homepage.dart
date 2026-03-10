@@ -4,6 +4,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../bikes/screens/bikes_view.dart';
 import '../../fuel/screens/fuel_log.dart' hide AppColors;
 import '../../expense/screens/expense_screen.dart';
+import '../../inspection/inspection.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -135,7 +136,10 @@ class _HomepageState extends State<Homepage> {
                 _buildDrawerItem(Icons.map, 'My Trips'),
                 _buildDrawerItem(Icons.settings, 'My Parts'),
                 _buildDrawerItem(Icons.store, 'Parts Marketplace'),
-                _buildDrawerItem(Icons.fact_check, 'My Inspections'),
+                _buildDrawerItem(Icons.fact_check, 'My Inspections', onTap: () {
+                  Get.back(); // Close drawer
+                  Get.to(() => const InspectionScreen());
+                }),
                 _buildDrawerItem(Icons.notifications_active, 'Service Reminders'),
                 _buildDrawerItem(Icons.report, 'Accident Reports'),
               ],
