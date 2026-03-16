@@ -269,6 +269,113 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
+  void _showLogMileageSheet(BuildContext context) {
+    final lastMileageController = TextEditingController(text: '45,230');
+    final newMileageController = TextEditingController();
+    
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 20,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Log New Mileage', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textDark)),
+            const SizedBox(height: 20),
+            TextField(
+              controller: lastMileageController,
+              decoration: InputDecoration(
+                labelText: 'Last Mileage',
+                suffixText: 'kms',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                enabled: false,
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: newMileageController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'New Mileage',
+                suffixText: 'kms',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.amber.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.amber),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.lightbulb_outline, color: Colors.amber, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Your new mileage should be greater than last mileage',
+                      style: TextStyle(fontSize: 12, color: Colors.amber.shade800),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (newMileageController.text.isNotEmpty) {
+                    final newMileage = int.tryParse(newMileageController.text.replaceAll(',', '')) ?? 0;
+                    final lastMileage = int.tryParse(lastMileageController.text.replaceAll(',', '')) ?? 0;
+                    
+                    if (newMileage > lastMileage) {
+                      Get.back();
+                      Get.snackbar(
+                        'Success',
+                        'Mileage logged successfully!',
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.green,
+                        colorText: Colors.white,
+                      );
+                    } else {
+                      Get.snackbar(
+                        'Error',
+                        'New mileage must be greater than last mileage',
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                    }
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryColor,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: const Text('Submit'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildVehicleOverview() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -384,7 +491,7 @@ class _HomepageState extends State<Homepage> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () => _showLogMileageSheet(context),
                 icon: const Icon(Icons.add, size: 18),
                 label: const Text('Log New Mileage'),
                 style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryColor, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 14), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
