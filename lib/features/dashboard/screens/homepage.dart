@@ -10,6 +10,7 @@ import '../../accident/new_accident.dart';
 import '../../services/screens/serviceHomeScreen.dart';
 import '../../bikes/screens/add_new_bike.dart';
 import '../../bikes/trips/views/trip_view.dart';
+import '../../orders/screens/myOrders.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -631,7 +632,9 @@ class _HomepageState extends State<Homepage> {
                 child: const Icon(Icons.add, color: AppColors.primaryColor, size: 28),
               ),
             ),
-            _buildNavItem(3, Icons.shopping_bag, 'Orders'),
+            _buildNavItem(3, Icons.shopping_bag, 'Orders', onTap: () {
+              Get.to(() => const MyOrders());
+            }),
             _buildNavItem(4, Icons.location_on, 'Nearby'),
           ],
         ),
@@ -639,10 +642,10 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  Widget _buildNavItem(int index, IconData icon, String label) {
+  Widget _buildNavItem(int index, IconData icon, String label, {VoidCallback? onTap}) {
     final isSelected = _currentNavIndex == index;
     return GestureDetector(
-      onTap: () => setState(() => _currentNavIndex = index),
+      onTap: onTap ?? () => setState(() => _currentNavIndex = index),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         child: Column(
