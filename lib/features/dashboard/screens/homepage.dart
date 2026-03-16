@@ -9,6 +9,7 @@ import '../../accident/accident_reports.dart';
 import '../../accident/new_accident.dart';
 import '../../services/screens/serviceHomeScreen.dart';
 import '../../bikes/screens/add_new_bike.dart';
+import '../../bikes/trips/views/trip_view.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -138,7 +139,10 @@ class _HomepageState extends State<Homepage> {
                   Get.back(); // Close drawer
                   Get.to(() => const ExpenseScreen());
                 }),
-                _buildDrawerItem(Icons.map, 'My Trips'),
+                _buildDrawerItem(Icons.map, 'My Trips', onTap: () {
+                  Get.back(); // Close drawer
+                  Get.to(() => const TripView());
+                }),
                 _buildDrawerItem(Icons.settings, 'My Parts'),
                 _buildDrawerItem(Icons.store, 'Parts Marketplace'),
                 _buildDrawerItem(Icons.build_circle, 'Service Marketplace', onTap: () {
@@ -219,7 +223,7 @@ class _HomepageState extends State<Homepage> {
               color: Colors.green,
               onTap: () {
                 Get.back();
-                // Trip screen not yet implemented
+                Get.to(() => const TripView());
               },
             ),
             _buildAddOptionItem(
