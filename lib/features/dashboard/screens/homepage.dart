@@ -7,6 +7,8 @@ import '../../expense/screens/expense_screen.dart';
 import '../../inspection/inspection.dart';
 import '../../accident/accident_reports.dart';
 import '../../accident/new_accident.dart';
+import '../../services/screens/serviceHomeScreen.dart';
+import '../../bikes/screens/add_new_bike.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -139,10 +141,15 @@ class _HomepageState extends State<Homepage> {
                 _buildDrawerItem(Icons.map, 'My Trips'),
                 _buildDrawerItem(Icons.settings, 'My Parts'),
                 _buildDrawerItem(Icons.store, 'Parts Marketplace'),
+                _buildDrawerItem(Icons.build_circle, 'Service Marketplace', onTap: () {
+                  Get.back(); // Close drawer
+                  Get.to(() => const ServiceHomeScreen());
+                }),
                 _buildDrawerItem(Icons.fact_check, 'My Inspections', onTap: () {
                   Get.back(); // Close drawer
                   Get.to(() => const InspectionScreen());
                 }),
+
                 _buildDrawerItem(Icons.notifications_active, 'Service Reminders'),
                 _buildDrawerItem(Icons.report, 'Accident Reports', onTap: () {
                   Get.back(); // Close drawer
@@ -161,6 +168,104 @@ class _HomepageState extends State<Homepage> {
       leading: Icon(icon, color: AppColors.primaryColor),
       title: Text(title, style: const TextStyle(fontSize: 14)),
       onTap: onTap ?? () {},
+    );
+  }
+
+  void _showAddOptionsSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '-', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textDark)),
+            const SizedBox(height: 20),
+            _buildAddOptionItem(
+              icon: Icons.directions_car,
+              title: 'Add New Vehicle',
+              color: Colors.blue,
+              onTap: () {
+                Get.back();
+                Get.to(() => const AddNewBike());
+              },
+            ),
+            _buildAddOptionItem(
+              icon: Icons.local_gas_station,
+              title: 'Add Fuel Log',
+              color: Colors.orange,
+              onTap: () {
+                Get.back();
+                Get.to(() => const FuelLog());
+              },
+            ),
+            _buildAddOptionItem(
+              icon: Icons.receipt_long,
+              title: 'Add Other Expenses',
+              color: Colors.purple,
+              onTap: () {
+                Get.back();
+                Get.to(() => const ExpenseScreen());
+              },
+            ),
+            _buildAddOptionItem(
+              icon: Icons.map,
+              title: 'Create New Trip',
+              color: Colors.green,
+              onTap: () {
+                Get.back();
+                // Trip screen not yet implemented
+              },
+            ),
+            _buildAddOptionItem(
+              icon: Icons.fact_check,
+              title: 'Create New Inspection',
+              color: Colors.teal,
+              onTap: () {
+                Get.back();
+                Get.to(() => const InspectionScreen());
+              },
+            ),
+            _buildAddOptionItem(
+              icon: Icons.notifications_active,
+              title: 'Create Service Reminder',
+              color: Colors.indigo,
+              onTap: () {
+                Get.back();
+                // Service reminder screen not yet implemented
+              },
+            ),
+            _buildAddOptionItem(
+              icon: Icons.report_problem,
+              title: 'Create Accident Report',
+              color: Colors.red,
+              onTap: () {
+                Get.back();
+                Get.to(() => const NewAccidentScreen());
+              },
+            ),
+            const SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAddOptionItem({required IconData icon, required String title, required Color color, required VoidCallback onTap}) {
+    return ListTile(
+      leading: Container(
+        width: 40, height: 40,
+        decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
+        child: Icon(icon, color: color),
+      ),
+      title: Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+      onTap: onTap,
+      contentPadding: EdgeInsets.zero,
     );
   }
 
@@ -403,7 +508,18 @@ class _HomepageState extends State<Homepage> {
           children: [
             _buildNavItem(0, Icons.home, 'Home'),
             _buildNavItem(1, Icons.request_quote, 'RFQs'),
-            _buildNavItem(2, Icons.add_circle, ''),
+            GestureDetector(
+              onTap: () => _showAddOptionsSheet(context),
+              child: Container(
+                width: 50, height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8, offset: const Offset(0, 2))],
+                ),
+                child: const Icon(Icons.add, color: AppColors.primaryColor, size: 28),
+              ),
+            ),
             _buildNavItem(3, Icons.shopping_bag, 'Orders'),
             _buildNavItem(4, Icons.location_on, 'Nearby'),
           ],
