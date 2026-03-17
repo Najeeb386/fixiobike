@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../bikes/screens/bikes_view.dart';
+import '../../fuel/screens/add_fuel_expense.dart';
 import '../../fuel/screens/fuel_log.dart' hide AppColors;
 import '../../expense/screens/expense_screen.dart';
 import '../../inspection/inspection.dart';
@@ -95,9 +96,9 @@ class _HomepageState extends State<Homepage> {
         ),
       ),
       actions: [
+        IconButton(icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white), onPressed: () {}),
         IconButton(icon: const Icon(Icons.notifications_outlined, color: Colors.white), onPressed: () {}),
-        Builder(builder: (context) => IconButton(icon: const Icon(Icons.menu, color: Colors.white), onPressed: () => Scaffold.of(context).openDrawer())),
-      ],
+        ],
     );
   }
 
@@ -523,6 +524,10 @@ class _HomepageState extends State<Homepage> {
                   onTap: () {
                     if (action['name'] == 'Report Accident') {
                       Get.to(() => const NewAccidentScreen());
+                    } else if (action['name'] == 'Log Fuel') {
+                      Get.to(() => const AddFuelExpense());
+                    } else if (action['name'] == 'Orders') {
+                      Get.to(() => const MyOrders());
                     }
                   },
                   child: Container(
